@@ -1,7 +1,7 @@
 
 package edu.ucsb.cs.cs162.tuts.linkedlist
 
-// A linked list trait with two case classes -- a non-empty 
+// A linked list trait with two case classes -- a non-empty
 //  list and an empty list.
 sealed trait LinkedList[T] {
   // Returns the head of a list or throws an exception if no head found.
@@ -27,20 +27,20 @@ sealed trait LinkedList[T] {
 
   // Maps a function over the list producing a new list with exactly the same number of elements,
   //  but where every element is equal to `fn` applied to the corresponding element
-  //  from the original list. 
+  //  from the original list.
   // Example: (1, (2, (3, Empty))) -- *3 --> (3, (6, (9, Empty)))
   def map[U](fn: T => U): LinkedList[U]
 
   // Maps a function over the list producing a linked list for every element in the original list,
   //  and flattening them together into one single list.
-  // Example: 
+  // Example:
   //  ("hi", ("you", ("!", Empty)))
-  //   -- chars -> ( ('h', ('i', Empty)), ('y', ('o', ('u', Empty))), ('!', Empty), Empty ) -> 
+  //   -- chars -> ( ('h', ('i', Empty)), ('y', ('o', ('u', Empty))), ('!', Empty), Empty ) ->
   //   -> ('h', ('i', ('y', ('o', ('u', ('!', Empty))))))
   def flatMap[U](fn: T => LinkedList[U]): LinkedList[U]
 
   // Filters all the elements from the original list where the predicate `pred` is true.
-  // Example: (1, (2, (3, (4, Empty)) -- x % 2 == 0 --> (2, (4, Empty))  
+  // Example: (1, (2, (3, (4, Empty)) -- x % 2 == 0 --> (2, (4, Empty))
   def filter(pred: T => Boolean): LinkedList[T]
 
   // Appends two lists together.
@@ -58,23 +58,23 @@ sealed trait LinkedList[T] {
 // A non-empty implementation of LinkedList[T].
 // Hint: only one method implementation in this class isn't a one-liner.
 case class Node[T](value: T, rest: LinkedList[T]) extends LinkedList[T] {
-  def head: T = ???
+  def head: T = value
 
-  def safeHead: Option[T] = ???
+  def safeHead: Option[T] = Some(value)
 
-  def tail: LinkedList[T] = ???
+  def tail: LinkedList[T] = rest
 
-  def length: Int = ???
+  def length: Int = 1 + rest.length
 
-  def take(n: Int): LinkedList[T] = ???
+  def take(n: Int): LinkedList[T] = if (n == 0) Empty() else Node(value, rest.take(n - 1))
 
-  def drop(n: Int): LinkedList[T] = ???
+  def drop(n: Int): LinkedList[T] = if (n == 0) this else rest.drop(n - 1)
 
-  def map[U](fn: T => U): LinkedList[U] = ???
+  def map[U](fn: T => U): LinkedList[U] = Node(fn(value), rest.map(fn))
 
-  def flatMap[U](fn: T => LinkedList[U]): LinkedList[U] = ???
+  def flatMap[U](fn: T => LinkedList[U]): LinkedList[U] = ???//Node(fn(value), rest.flatMap(fn))
 
-  def filter(pred: T => Boolean): LinkedList[T] = ???
+  def filter(pred: T => Boolean): LinkedList[T] = if (pred(value)) Node(value, rest.filter(pred)) else rest.filter(pred)
 
   def append(other: LinkedList[T]): LinkedList[T] = ???
 
