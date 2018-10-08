@@ -76,11 +76,11 @@ case class Node[T](value: T, rest: LinkedList[T]) extends LinkedList[T] {
 
   def filter(pred: T => Boolean): LinkedList[T] = if (pred(value)) Node(value, rest.filter(pred)) else rest.filter(pred)
 
-  def append(other: LinkedList[T]): LinkedList[T] = ???
+  def append(other: LinkedList[T]): LinkedList[T] = if (value == Empty()) other else Node(value, rest.append(other))
 
-  def foldLeft[U](start: U)(fn: (U, T) => U): U = ???
+  def foldLeft[U](start: U)(fn: (U, T) => U): U = rest.foldLeft(fn(start, value)){fn}
 
-  def foldRight[U](start: U)(fn: (T, U) => U): U = ???
+  def foldRight[U](start: U)(fn: (T, U) => U): U = if (value == Empty()) start else fn(value, rest.foldRight(start){fn})
 }
 
 // An empty implementation of LinkedList[T]
