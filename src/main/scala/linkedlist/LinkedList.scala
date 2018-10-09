@@ -72,7 +72,7 @@ case class Node[T](value: T, rest: LinkedList[T]) extends LinkedList[T] {
 
   def map[U](fn: T => U): LinkedList[U] = Node(fn(value), rest.map(fn))
 
-  def flatMap[U](fn: T => LinkedList[U]): LinkedList[U] = ???//Node(fn(value), rest.flatMap(fn))
+  def flatMap[U](fn: T => LinkedList[U]): LinkedList[U] = fn(value).append(rest.flatMap(fn))
 
   def filter(pred: T => Boolean): LinkedList[T] = if (pred(value)) Node(value, rest.filter(pred)) else rest.filter(pred)
 
